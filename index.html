@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VANTOR STUDIO — حيث تتحول الأفكار إلى واقع</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #2D7FF9;
+    --blue-bright: #4DA3FF;
+    --blue-glow: rgba(45, 127, 249, 0.4);
+    --black: #050810;
+    --black-soft: #0A0F1C;
+    --black-card: #0F1524;
+    --white: #FFFFFF;
+    --gray: #8892A6;
+    --border: rgba(45, 127, 249, 0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45,127,249,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,127,249,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: -2;
+    mask-image: radial-gradient(circle at 50% 30%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at 50% 30%, #000 20%, transparent 75%);
+  }
+  .bg-glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -3;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .glow-1 { top: -200px; right: -150px; background: #1E5FD9; }
+  .glow-2 { bottom: -250px; left: -150px; background: #0A2A66; }
+
+  .particles { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  .particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: var(--blue-bright);
+    border-radius: 50%;
+    opacity: 0.5;
+    box-shadow: 0 0 10px var(--blue-bright);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    from { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    to { transform: translateY(-110vh) translateX(40px); opacity: 0; }
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 18px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(5, 8, 16, 0.6);
+    border-bottom: 1px solid transparent;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    border-bottom: 1px solid var(--border);
+    background: rgba(5, 8, 16, 0.85);
+    padding: 12px 5%;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    direction: ltr;
+    white-space: nowrap;
+  }
+  .logo .logo-text { color: var(--white); }
+  .logo .logo-sub { color: var(--blue-bright); }
+  .logo-dot {
+    width: 10px; height: 10px;
+    background: var(--blue);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--blue), 0 0 30px var(--blue);
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 35px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--gray);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+    transition: width 0.3s;
+    box-shadow: 0 0 10px var(--blue-glow);
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, var(--blue), #1E5FD9);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px var(--blue-glow);
+  }
+  .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px var(--blue-glow);
+  }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    padding: 5px;
+  }
+  .menu-toggle svg { width: 28px; height: 28px; stroke: var(--white); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ===== SVG ICON SYSTEM ===== */
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--blue-bright);
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 5% 60px;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    background: rgba(45, 127, 249, 0.08);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: var(--blue-bright);
+    font-weight: 600;
+    margin-bottom: 30px;
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero-badge .dot {
+    width: 7px; height: 7px;
+    background: var(--blue-bright);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--blue-bright);
+    animation: pulse 1.5s infinite;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin-bottom: 25px;
+    animation: fadeUp 0.9s ease 0.1s both;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(135deg, var(--blue-bright), var(--blue), #7BB8FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px var(--blue-glow));
+  }
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--gray);
+    max-width: 650px;
+    margin-bottom: 40px;
+    font-weight: 400;
+    animation: fadeUp 0.9s ease 0.2s both;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.9s ease 0.3s both;
+  }
+  .btn-primary {
+    padding: 16px 38px;
+    background: linear-gradient(135deg, var(--blue), #1E5FD9);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 8px 30px var(--blue-glow);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 45px var(--blue-glow);
+  }
+  .btn-primary .icon { width: 18px; height: 18px; }
+  .btn-primary .icon svg { stroke: var(--white); }
+
+  .btn-ghost {
+    padding: 16px 38px;
+    background: transparent;
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-ghost:hover {
+    border-color: var(--blue);
+    background: rgba(45, 127, 249, 0.08);
+    transform: translateY(-3px);
+  }
+  .btn-ghost .icon { width: 18px; height: 18px; }
+
+  .hero-stats {
+    display: flex;
+    gap: 60px;
+    margin-top: 80px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.9s ease 0.4s both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--blue-bright);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label { font-size: 0.85rem; color: var(--gray); }
+
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 100px 5%;
+    position: relative;
+  }
+  .section-head {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .section-tag {
+    color: var(--blue-bright);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 18px;
+  }
+  .section-sub {
+    color: var(--gray);
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+  }
+
+  /* ===== SERVICES ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .service-card {
+    background: linear-gradient(160deg, var(--black-card), rgba(15,21,36,0.5));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 40px 30px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(45, 127, 249, 0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(45,127,249,0.1);
+  }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon {
+    width: 65px; height: 65px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(45,127,249,0.15), rgba(45,127,249,0.05));
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    transition: transform 0.4s;
+  }
+  .service-icon .icon { width: 32px; height: 32px; }
+  .service-card:hover .service-icon { transform: scale(1.1) rotate(-5deg); }
+  .service-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .service-card p {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  /* ===== PORTFOLIO (GRID) ===== */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .portfolio-item {
+    position: relative;
+    height: 300px;
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .portfolio-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 40px rgba(45,127,249,0.12);
+  }
+  .portfolio-bg {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.6s ease;
+  }
+  .p1 { background: linear-gradient(135deg, #0A1A3D, #1E5FD9, #0A2A66); }
+  .p2 { background: linear-gradient(135deg, #050810, #2D7FF9, #0A0F1C); }
+  .p3 { background: linear-gradient(135deg, #0F1524, #4DA3FF, #050810); }
+  .p4 { background: linear-gradient(135deg, #1E5FD9, #050810, #2D7FF9); }
+  .p5 { background: linear-gradient(135deg, #0A0F1C, #1E5FD9, #4DA3FF); }
+  .p6 { background: linear-gradient(135deg, #2D7FF9, #0A1A3D, #050810); }
+
+  .portfolio-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 21px);
+  }
+  .portfolio-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    z-index: 2;
+    opacity: 0.85;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  .portfolio-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: rgba(255,255,255,0.9);
+    stroke-width: 1.3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .portfolio-item:hover .portfolio-bg { transform: scale(1.1); }
+  .portfolio-item:hover .portfolio-icon { transform: translate(-50%, -60%) scale(1.1); opacity: 1; }
+  .portfolio-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5,8,16,0.96) 0%, rgba(5,8,16,0.2) 50%, transparent 75%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px;
+    z-index: 3;
+  }
+  .portfolio-tag {
+    display: inline-block;
+    padding: 5px 14px;
+    background: rgba(45,127,249,0.2);
+    border: 1px solid rgba(45,127,249,0.4);
+    border-radius: 50px;
+    font-size: 0.72rem;
+    color: var(--blue-bright);
+    font-weight: 700;
+    margin-bottom: 10px;
+    width: fit-content;
+    letter-spacing: 1px;
+  }
+  .portfolio-overlay h3 { font-size: 1.25rem; margin-bottom: 5px; }
+  .portfolio-overlay p { color: var(--gray); font-size: 0.88rem; }
+
+  /* ===== COURSES ===== */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .course-card {
+    background: linear-gradient(160deg, var(--black-card), rgba(10,15,28,0.6));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+  .course-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(45,127,249,0.4);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+  }
+  .course-header {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-header.c1 { background: linear-gradient(135deg, #0A1A3D, #1E5FD9); }
+  .course-header.c2 { background: linear-gradient(135deg, #0F1524, #2D7FF9); }
+  .course-header.c3 { background: linear-gradient(135deg, #050810, #4DA3FF); }
+  .course-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 60%);
+  }
+  .course-header .course-icon {
+    position: relative;
+    z-index: 2;
+    width: 70px;
+    height: 70px;
+  }
+  .course-header .course-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: rgba(255,255,255,0.92);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .course-body { padding: 30px; }
+  .course-body h3 { font-size: 1.35rem; margin-bottom: 12px; }
+  .course-body p { color: var(--gray); font-size: 0.95rem; margin-bottom: 20px; }
+  .course-meta {
+    display: flex;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--gray);
+  }
+  .course-meta span { display: flex; align-items: center; gap: 6px; }
+  .course-meta .icon { width: 16px; height: 16px; }
+
+  /* ===== DISCORD CTA ===== */
+  .discord-section {
+    padding: 60px 5%;
+  }
+  .discord-box {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(45,127,249,0.12), rgba(15,21,36,0.8));
+    border: 1px solid rgba(45,127,249,0.3);
+    border-radius: 28px;
+    padding: 70px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .discord-box::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--blue-glow), transparent 70%);
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .discord-icon {
+    width: 90px; height: 90px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, #5865F2, #4752C4);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 40px rgba(88,101,242,0.4);
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+  }
+  .discord-icon svg {
+    width: 52px;
+    height: 52px;
+    fill: var(--white);
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .discord-box h2 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 18px;
+    font-weight: 900;
+    position: relative;
+  }
+  .discord-box p {
+    color: var(--gray);
+    max-width: 550px;
+    margin: 0 auto 35px;
+    font-size: 1.05rem;
+    position: relative;
+  }
+  .discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 45px;
+    background: linear-gradient(135deg, #5865F2, #4752C4);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px rgba(88,101,242,0.4);
+    position: relative;
+  }
+  .discord-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 50px rgba(88,101,242,0.6);
+  }
+  .discord-btn .icon { width: 22px; height: 22px; }
+  .discord-btn .icon svg { fill: var(--white); stroke: none; }
+
+  /* ===== CONTACT ===== */
+  .contact-section { padding-bottom: 100px; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .contact-info h3 {
+    font-size: 1.8rem;
+    margin-bottom: 18px;
+    font-weight: 900;
+  }
+  .contact-info > p {
+    color: var(--gray);
+    margin-bottom: 35px;
+    font-size: 1rem;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px;
+    background: var(--black-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: var(--white);
+  }
+  .contact-item:hover {
+    border-color: rgba(45,127,249,0.4);
+    transform: translateX(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  .contact-item-icon {
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(45,127,249,0.2), rgba(45,127,249,0.05));
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-item-icon .icon { width: 24px; height: 24px; }
+  .contact-item-text .label {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 2px;
+  }
+  .contact-item-text .value {
+    font-weight: 700;
+    font-size: 1rem;
+    direction: ltr;
+    text-align: right;
+  }
+
+  .contact-form {
+    background: var(--black-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+  }
+  .contact-form h3 {
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(5,8,16,0.6);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--white);
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(45,127,249,0.15);
+  }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .form-submit {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--blue), #1E5FD9);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 25px var(--blue-glow);
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .form-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px var(--blue-glow);
+  }
+  .form-submit .icon { width: 18px; height: 18px; }
+  .form-submit .icon svg { stroke: var(--white); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--black-soft);
+    border-top: 1px solid var(--border);
+    padding: 60px 5% 30px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    direction: ltr;
+  }
+  .footer-logo .logo-sub { color: var(--blue-bright); }
+  .footer-tag {
+    color: var(--gray);
+    max-width: 450px;
+    margin: 0 auto 35px;
+    font-size: 0.95rem;
+  }
+  .footer-links {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+  }
+  .footer-links a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--blue-bright); }
+  .footer-divider {
+    height: 1px;
+    background: var(--border);
+    max-width: 1100px;
+    margin: 0 auto 25px;
+  }
+  .copyright {
+    color: var(--gray);
+    font-size: 0.85rem;
+    line-height: 2;
+  }
+  .copyright .accent {
+    color: var(--blue-bright);
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 40px; }
+  }
+  @media (max-width: 768px) {
+    .nav-links {
+      position: fixed;
+      top: 0; right: -100%;
+      width: 75%;
+      height: 100vh;
+      background: var(--black-soft);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      transition: right 0.4s ease;
+      border-left: 1px solid var(--border);
+    }
+    .nav-links.open { right: 0; }
+    .nav-links a { font-size: 1.2rem; }
+    .nav-cta { display: none; }
+    .menu-toggle { display: block; }
+    .hero-stats { gap: 35px; margin-top: 55px; }
+    .stat-num { font-size: 1.8rem; }
+    section { padding: 70px 5%; }
+    .discord-box { padding: 50px 25px; }
+    .contact-form { padding: 25px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG SPRITE -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+  <symbol id="i-graduation" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+  <symbol id="i-discord" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+  <symbol id="i-trending" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></symbol>
+  <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+  <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+</svg>
+
+<div class="bg-grid"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+<div class="particles" id="particles"></div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    <span class="logo-text">VANTOR</span>
+    <span class="logo-sub">STUDIO</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">الرئيسية</a></li>
+    <li><a href="#services">الخدمات</a></li>
+    <li><a href="#portfolio">الأعمال</a></li>
+    <li><a href="#courses">الدورات</a></li>
+    <li><a href="#discord">ديسكورد</a></li>
+    <li><a href="#contact">تواصل</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">ابدأ مشروعك</a>
+  <button class="menu-toggle" id="menuToggle" aria-label="القائمة">
+    <svg><use href="#i-menu"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    استوديو إبداعي متكامل
+  </div>
+  <h1>
+    نصنع <span class="grad">التجارب الرقمية</span><br>
+    التي تُلهم العالم
+  </h1>
+  <p>
+    VANTOR STUDIO هو استوديو متخصص في البرمجة، التصميم، والدورات التعليمية للتجارة الإلكترونية والحياة — حيث تتحول أفكارك إلى واقع رقمي استثنائي.
+  </p>
+  <div class="hero-buttons">
+    <a href="#portfolio" class="btn-primary">
+      استكشف أعمالنا
+      <span class="icon"><svg><use href="#i-arrow-left"/></svg></span>
+    </a>
+    <a href="#discord" class="btn-ghost">
+      <span class="icon"><svg><use href="#i-discord"/></svg></span>
+      انضم لديسكورد
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" data-count="150">+150</div>
+      <div class="stat-label">مشروع مكتمل</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="80">+80</div>
+      <div class="stat-label">عميل سعيد</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="25">+25</div>
+      <div class="stat-label">دورة تعليمية</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" data-count="5">+5</div>
+      <div class="stat-label">سنوات خبرة</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-head reveal">
+    <span class="section-tag">WHAT WE DO</span>
+    <h2 class="section-title">خدماتنا الاحترافية</h2>
+    <p class="section-sub">نقدم حلولاً رقمية متكاملة تجمع بين الإبداع والتقنية لتلبية جميع احتياجاتك</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon"><span class="icon"><svg><use href="#i-code"/></svg></span></div>
+      <h3>تطوير المواقع</h3>
+      <p>مواقع ويب احترافية وسريعة ومتجاوبة مع جميع الأجهزة، مبنية بأحدث التقنيات وأفضل الممارسات.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon"><span class="icon"><svg><use href="#i-palette"/></svg></span></div>
+      <h3>التصميم الإبداعي</h3>
+      <p>تصاميم بصرية مميزة للهوية التجارية، الواجهات، والشعارات التي تعكس شخصية علامتك التجارية.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon"><span class="icon"><svg><use href="#i-cart"/></svg></span></div>
+      <h3>متاجر إلكترونية</h3>
+      <p>بناء متاجر إلكترونية متكاملة مع بوابات الدفع، إدارة المنتجات، وتجربة شراء سلسة لعملائك.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon"><span class="icon"><svg><use href="#i-graduation"/></svg></span></div>
+      <h3>الدورات التعليمية</h3>
+      <p>دورات متخصصة في التجارة الإلكترونية والمهارات الحياتية لتمكينك من تحقيق أهدافك.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon"><span class="icon"><svg><use href="#i-zap"/></svg></span></div>
+      <h3>تحسين الأداء</h3>
+      <p>تحسين سرعة مواقعك وأدائها في محركات البحث SEO لضمان ظهور أفضل وتجربة مستخدم مثالية.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon"><span class="icon"><svg><use href="#i-rocket"/></svg></span></div>
+      <h3>الهوية التجارية</h3>
+      <p>بناء هوية تجارية متكاملة من الشعار إلى الألوان والخطوط لتمنح مشروعك حضوراً قوياً.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-head reveal">
+    <span class="section-tag">OUR WORK</span>
+    <h2 class="section-title">أعمال نفخر بها</h2>
+    <p class="section-sub">مجموعة مختارة من مشاريعنا التي تجمع بين الإبداع والاحترافية</p>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-item reveal">
+      <div class="portfolio-bg p1"></div>
+      <div class="portfolio-icon"><svg><use href="#i-monitor"/></svg></div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">WEB DEVELOPMENT</span>
+        <h3>منصة تجارة إلكترونية</h3>
+        <p>متجر متكامل مع لوحة تحكم متقدمة</p>
+      </div>
+    </div>
+    <div class="portfolio-item reveal">
+      <div class="portfolio-bg p2"></div>
+      <div class="portfolio-icon"><svg><use href="#i-palette"/></svg></div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">UI/UX DESIGN</span>
+        <h3>هوية بصرية لعلامة تجارية</h3>
+        <p>تصميم شعار ونظام بصري متكامل</p>
+      </div>
+    </div>
+    <div class="portfolio-item reveal">
+      <div class="portfolio-bg p3"></div>
+      <div class="portfolio-icon"><svg><use href="#i-layers"/></svg></div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">WEB APP</span>
+        <h3>لوحة تحكم إدارية</h3>
+        <p>نظام إدارة متقدم مع إحصائيات حية</p>
+      </div>
+    </div>
+    <div class="portfolio-item reveal">
+      <div class="portfolio-bg p4"></div>
+      <div class="portfolio-icon"><svg><use href="#i-smartphone"/></svg></div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">LANDING PAGE</span>
+        <h3>صفحة هبوط تسويقية</h3>
+        <p>تصميم يحول الزوار إلى عملاء</p>
+      </div>
+    </div>
+    <div class="portfolio-item reveal">
+      <div class="portfolio-bg p5"></div>
+      <div class="portfolio-icon"><svg><use href="#i-award"/></svg></div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">BRANDING</span>
+        <h3>هوية استوديو إبداعي</h3>
+        <p>نظام بصري عصري وجذاب</p>
+      </div>
+    </div>
+    <div class="portfolio-item reveal">
+      <div class="portfolio-bg p6"></div>
+      <div class="portfolio-icon"><svg><use href="#i-cart"/></svg></div>
+      <div class="portfolio-overlay">
+        <span class="portfolio-tag">E-COMMERCE</span>
+        <h3>متجر إلكتروني متخصص</h3>
+        <p>تجربة تسوق سلسة ومبتكرة</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section id="courses">
+  <div class="section-head reveal">
+    <span class="section-tag">LEARN WITH US</span>
+    <h2 class="section-title">الدورات التعليمية</h2>
+    <p class="section-sub">طوّر مهاراتك مع دوراتنا المتخصصة في التجارة الإلكترونية والمهارات الحياتية</p>
+  </div>
+  <div class="courses-grid">
+    <div class="course-card reveal">
+      <div class="course-header c1">
+        <span class="course-icon"><svg><use href="#i-cart"/></svg></span>
+      </div>
+      <div class="course-body">
+        <h3>أساسيات التجارة الإلكترونية</h3>
+        <p>تعلم كيف تبدأ متجرك الإلكتروني من الصفر، من اختيار المنتج إلى التسويق والبيع.</p>
+        <div class="course-meta">
+          <span><span class="icon"><svg><use href="#i-book"/></svg></span> 12 درس</span>
+          <span><span class="icon"><svg><use href="#i-clock"/></svg></span> 8 ساعات</span>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-header c2">
+        <span class="course-icon"><svg><use href="#i-trending"/></svg></span>
+      </div>
+      <div class="course-body">
+        <h3>التسويق الرقمي المتقدم</h3>
+        <p>استراتيجيات تسويق فعّالة عبر السوشيال ميديا والإعلانات الممولة لزيادة مبيعاتك.</p>
+        <div class="course-meta">
+          <span><span class="icon"><svg><use href="#i-book"/></svg></span> 15 درس</span>
+          <span><span class="icon"><svg><use href="#i-clock"/></svg></span> 10 ساعات</span>
+        </div>
+      </div>
+    </div>
+    <div class="course-card reveal">
+      <div class="course-header c3">
+        <span class="course-icon"><svg><use href="#i-lightbulb"/></svg></span>
+      </div>
+      <div class="course-body">
+        <h3>المهارات الحياتية والقيادية</h3>
+        <p>طوّر مهاراتك الشخصية في القيادة، التواصل، وإدارة الوقت لتحقيق النجاح في حياتك.</p>
+        <div class="course-meta">
+          <span><span class="icon"><svg><use href="#i-book"/></svg></span> 10 دروس</span>
+          <span><span class="icon"><svg><use href="#i-clock"/></svg></span> 6 ساعات</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCORD CTA -->
+<section class="discord-section" id="discord">
+  <div class="discord-box reveal">
+    <div class="discord-icon">
+      <svg><use href="#i-discord"/></svg>
+    </div>
+    <h2>انضم إلى مجتمعنا على ديسكورد</h2>
+    <p>كن جزءاً من مجتمع VANTOR STUDIO — تواصل مع المبدعين، اطرح أسئلتك، واحصل على الدعم المباشر من فريقنا.</p>
+    <a href="https://discord.gg/3EQ2ankWqX" target="_blank" rel="noopener" class="discord-btn">
+      <span class="icon"><svg><use href="#i-discord"/></svg></span>
+      انضم الآن إلى السيرفر
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-head reveal">
+    <span class="section-tag">GET IN TOUCH</span>
+    <h2 class="section-title">تواصل معنا</h2>
+    <p class="section-sub">لديك فكرة أو مشروع؟ نحن هنا لمساعدتك على تحويلها إلى واقع</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>لنبدأ مشروعك القادم</h3>
+      <p>فريقنا جاهز للإجابة على استفساراتك ومساعدتك في كل ما تحتاجه. لا تتردد في التواصل معنا عبر أي من القنوات التالية:</p>
+
+      <a href="tel:07738900598" class="contact-item">
+        <div class="contact-item-icon"><span class="icon"><svg><use href="#i-phone"/></svg></span></div>
+        <div class="contact-item-text">
+          <div class="label">الهاتف</div>
+          <div class="value">07738900598</div>
+        </div>
+      </a>
+
+      <a href="mailto:mustafahadi8070@gmail.com" class="contact-item">
+        <div class="contact-item-icon"><span class="icon"><svg><use href="#i-mail"/></svg></span></div>
+        <div class="contact-item-text">
+          <div class="label">البريد الإلكتروني</div>
+          <div class="value">mustafahadi8070@gmail.com</div>
+        </div>
+      </a>
+
+      <a href="https://discord.gg/3EQ2ankWqX" target="_blank" rel="noopener" class="contact-item">
+        <div class="contact-item-icon"><span class="icon"><svg><use href="#i-discord"/></svg></span></div>
+        <div class="contact-item-text">
+          <div class="label">ديسكورد</div>
+          <div class="value">VANTOR STUDIO Server</div>
+        </div>
+      </a>
+    </div>
+
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <h3>أرسل لنا رسالة</h3>
+      <div class="form-group">
+        <label>الاسم الكامل</label>
+        <input type="text" placeholder="اكتب اسمك" required>
+      </div>
+      <div class="form-group">
+        <label>البريد الإلكتروني</label>
+        <input type="email" placeholder="example@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>رسالتك</label>
+        <textarea placeholder="أخبرنا عن مشروعك..." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">
+        <span class="icon"><svg><use href="#i-send"/></svg></span>
+        إرسال الرسالة
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="logo-dot"></div>
+    <span class="logo-text">VANTOR</span>
+    <span class="logo-sub">STUDIO</span>
+  </div>
+  <p class="footer-tag">حيث تتحول الأفكار إلى واقع رقمي استثنائي</p>
+  <div class="footer-links">
+    <a href="#home">الرئيسية</a>
+    <a href="#services">الخدمات</a>
+    <a href="#portfolio">الأعمال</a>
+    <a href="#courses">الدورات</a>
+    <a href="#discord">ديسكورد</a>
+    <a href="#contact">تواصل</a>
+  </div>
+  <div class="footer-divider"></div>
+  <p class="copyright">
+    © 2025 VANTOR STUDIO — جميع الحقوق محفوظة<br>
+    <span class="accent">Built By Hussain Mustafa Hadi</span>
+  </p>
+</footer>
+
+<script>
+  /* ===== Navbar scroll ===== */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  /* ===== Mobile menu ===== */
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    const isOpen = navLinks.classList.contains('open');
+    menuToggle.innerHTML = isOpen
+      ? '<svg><use href="#i-x"/></svg>'
+      : '<svg><use href="#i-menu"/></svg>';
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.innerHTML = '<svg><use href="#i-menu"/></svg>';
+    });
+  });
+
+  /* ===== Particles ===== */
+  const particlesContainer = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.bottom = '-10px';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+    particlesContainer.appendChild(p);
+  }
+
+  /* ===== Reveal on scroll ===== */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  /* ===== Counter animation ===== */
+  const counters = document.querySelectorAll('[data-count]');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.count);
+        let current = 0;
+        const step = target / 60;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          el.textContent = '+' + Math.floor(current);
+        }, 20);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => counterObserver.observe(c));
+
+  /* ===== Form ===== */
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '✓ تم الإرسال بنجاح';
+    btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+    setTimeout(() => {
+      btn.innerHTML = originalHTML;
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+</body>
+</html>
